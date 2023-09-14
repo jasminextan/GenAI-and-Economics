@@ -1,11 +1,11 @@
 import numpy as np
 import pandas as pd
-import matplotlib as plt
+import matplotlib.pyplot as plt
 import tensorflow as tf
-from sklearn import MinMaxScaler, OneHotEncoder, train_test_split, RFE
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
+from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
-
 
 minwage_df = pd.read_csv('Proj1_LSTM/MinimumWage.csv')
 partcon_df = pd.read_csv('Proj1_LSTM/MinWage_PartyControl.csv')
@@ -19,11 +19,25 @@ print(combined_df)
 combined_df.to_csv('Proj1_LSTM/combined_dataset.csv', index=False)
 
 # Load the dataset
-df = pd.read_csv('combined_dataset.csv')
+df = pd.read_csv('Proj1_LSTM/combined_dataset.csv')
+
+# Drop duplicate features
+df = df.drop(['FederalMinimumWage'], axis=1)
 
 # Handle missing values
 df = df.dropna()
 
+print(df.head())
+
+# Convert the money columns to float
+df['FedMinWage'] = df['FedMinWage'].str.replace('$', '').astype(float)
+df['MinWageIndexedLastRaiseYear'] = df['MinWageIndexedLastRaiseYear'].str.replace('$', '').astype(float)
+df['RateChange'] = df['RateChange'].str.replace('$', '').astype(float)
+     
+# Verify the data types
+print(df.dtypes)
+
+"""
 # Perform feature scaling
 scaler = MinMaxScaler()
 numeric_features = ['FedMinWage', 'RateChange', 'PercentChange', 'YearsSinceLastChange', 'FederalMinimumWage', 'MeanAnnualInflation', 'MinWageIndexedLastRaiseYear', 'UnemploymentRateDecember', 'GDP_AnnualGrowth']
@@ -47,3 +61,4 @@ y = np.array(y)
 
 # Split the dataset into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, shuffle=False)
+"""
