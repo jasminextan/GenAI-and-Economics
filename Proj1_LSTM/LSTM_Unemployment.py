@@ -6,8 +6,6 @@ from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sklearn.model_selection import train_test_split
 from keras.models import Sequential
 from keras.layers import LSTM, Dense
-from sklearn.metrics import mean_absolute_error, mean_squared_error, mean_absolute_percentage_error, r2_score
-
 
 
 minwage_df = pd.read_csv('Proj1_LSTM/MinimumWage.csv')
@@ -69,6 +67,11 @@ df_encoded = df_encoded.drop(['HouseParty_Republican'], axis=1)
 df_encoded = df_encoded.drop(['IncreaseFlag_False'], axis=1)
 
 print(df_encoded.dtypes)
+
+# Move target var to end of dataset, change datatype
+unemployment_rate = df_encoded.pop('UnemploymentRateDecember')
+df_encoded.insert(len(df_encoded.columns), 'UnemploymentRateDecember', unemployment_rate)
+
 df_encoded.to_csv('Proj1_LSTM/encoded_dataset.csv', index=False)
 
 # Move target var to end of dataset, change datatype
@@ -93,6 +96,7 @@ X_train = X_train.astype(float)
 X_test = X_test.astype(float)
 y_train = y_train.astype(float)
 y_test = y_test.astype(float)
+y_test_og = y_test
 X_train = tf.convert_to_tensor(X_train)
 X_test = tf.convert_to_tensor(X_test)
 y_train = tf.convert_to_tensor(y_train)
@@ -112,16 +116,9 @@ model.fit(X_train, y_train, epochs=100, batch_size=32)
 
 # Evaluate the model
 loss = model.evaluate(X_test, y_test)
-print(f'Loss: {loss}')
-
-"""
-mae, precision, recall = model.evaluate(X_test, y_test)
-f1_score = 2 * (precision * recall) / (precision + recall)
-print(f'MAE: {mae}, Precision: {precision}, Recall: {recall}, F1-score: {f1_score}')
-"""
-# Loss: The value of the loss function, which is a measure of the model's error. In this case, we use binary cross-entropy as it's a binary classification problem.
-# Accuracy: The proportion of correct predictions out of the total number of instances.
-# MAE: The average of the absolute differences between the predicted and actual values.
-# Precision: The proportion of true positive predictions out of the total predicted positives.
-# Recall: The proportion of true positive predictions out of the total actual positives.
-# F1-score: The harmonic mean of precision and recall, providing a balance between the two metrics.
+# loss = MSE
+# loss at 50 epochs: 4450.8618
+# loss at 60 epochs: 1.1211
+# loss at 80 epochs: 1.1676
+# loss at 90 epochs: 0.9528
+# loss at 100 epochs: 0.0185
