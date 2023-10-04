@@ -117,8 +117,15 @@ model.fit(X_train, y_train, epochs=100, batch_size=32)
 # Evaluate the model
 loss = model.evaluate(X_test, y_test)
 # loss = MSE
-# loss at 50 epochs: 4450.8618
-# loss at 60 epochs: 1.1211
-# loss at 80 epochs: 1.1676
-# loss at 90 epochs: 0.9528
-# loss at 100 epochs: 0.0185
+# loss at 1 epoch, run 1: 48808.2109
+# loss at 1 epoch, run 2: 93718.8672
+# loss at 1 epoch, run 3: 22665.8574
+# loss at 50 epochs, run 1: 4450.8618
+# loss at 50 epochs, run 2: 14.9736
+# loss at 50 epochs, run 3: 1.4146
+# loss at 75 epochs, run 1: 0.7280
+# loss at 75 epochs, run 2: 1.3312
+# loss at 75 epochs, run 3: 645.0665
+# loss at 100 epochs, run 1: 0.0185
+# loss at 100 epochs, run 2: 0.1509
+# loss at 100 epochs, run 3: 0.0542
