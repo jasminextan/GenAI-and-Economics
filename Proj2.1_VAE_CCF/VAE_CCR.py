@@ -87,8 +87,8 @@ plt.plot(threshold_rt, recall_rt[1:], label="Recall")
 plt.title('Precision-Recall Curve', fontsize=15)
 plt.xlabel('Recall', fontsize=13)
 plt.ylabel('Precision', fontsize=13)
+plt.savefig('Proj2.1_VAE_CCF/PRCurve.png')
 plt.show()
-plt.savefig('PRCurve.png')
 
 
 # Find the optimal threshold value
@@ -107,5 +107,5 @@ sns.heatmap(conf_matrix, annot=True, fmt="d", cmap=plt.cm.Blues)
 plt.title('Confusion Matrix', fontsize=15)
 plt.xlabel('Predicted Label', fontsize=13)
 plt.ylabel('True Label', fontsize=13)
+plt.savefig('Proj2.1_VAE_CCF/ConfMatrix.png')
 plt.show()
-plt.savefig('ConfMatrix.png')

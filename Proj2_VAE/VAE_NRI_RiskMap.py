@@ -31,7 +31,7 @@ sm = plt.cm.ScalarMappable(cmap='viridis')
 sm.set_array(gdf_counties['RISK'])
 cbar = plt.colorbar(sm, ax=ax, fraction=0.02)  # Specify the ax argument
 # Show and save the plot
-plt.savefig('RISKMAP.png')
+plt.savefig('Proj2_VAE/RISKMAP.png')
 plt.show()
 
 
