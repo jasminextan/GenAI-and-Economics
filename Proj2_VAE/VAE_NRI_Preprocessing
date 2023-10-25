@@ -1,0 +1,60 @@
+import pandas as pd
+from sklearn.preprocessing import QuantileTransformer
+
+# Load NRI data
+df = pd.read_csv('Proj2_VAE/NRI_Table_Counties/NRI_Table_Counties.csv')
+print('original shape: ', df.shape) 
+
+# Preprocessing
+
+df['RISK_SCORE'] = df['RISK_SCORE'].fillna(df['RISK_SCORE'].mean())
+
+def get_nan_features(df):
+    nan_features = df.isnull().sum()
+    return nan_features
+
+def drop_nan_features(df):
+    df_dropped = df.dropna(axis=1)
+    return df_dropped
+
+def handle_nan_features(df):
+    nan_features = get_nan_features(df)
+    print(f"Columns with NaN values: {nan_features}")
+    df_dropped = drop_nan_features(df)
+    return df_dropped
+
+nri_data = handle_nan_features(df)
+print('dropped nan shape: ',nri_data.shape) 
+
+# drop string vars; these are all the redundant 'rating' variables.
+string_vars = nri_data.select_dtypes(include=[object]).columns
+nri_data = nri_data.drop(columns=string_vars)
+print('dropped strings shape: ',nri_data.shape) 
+
+'''
+# get dummies
+nri_data = pd.get_dummies(nri_data)
+print('get dummies shape: ',nri_data.shape) 
+
+#remove constant features
+constant_features = [col for col in nri_data.columns if nri_data[col].nunique() == 1]
+nri_data.drop(constant_features, axis=1, inplace=True)
+
+#remove duplicate features
+unique_features = nri_data.loc[:, nri_data.columns.duplicated() == False]
+duplicated_features = [dup_col for dup_col in nri_data.columns if dup_col not in unique_features.columns]
+print('removed constant and duplicates: ',nri_data.shape) 
+'''
+
+# normalization
+def min_max_scaling(series):
+    return (series - series.min()) / (series.max() - series.min())
+
+for col in nri_data.columns:
+    nri_data[col] = min_max_scaling(df[col])
+
+
+print('final shape: ',nri_data.shape) 
+
+
+nri_data.to_csv('Proj2_VAE/nri_data.csv')
